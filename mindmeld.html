@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find the Hidden Key</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bilma:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Bilma', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #4e54c8, #8f94fb);
+            color: #fff;
+            display: flex;
+            height: 100vh;
+            flex-wrap: wrap;
+        }
+
+        .container {
+            display: flex;
+            width: 100%;
+            flex-wrap: wrap;
+        }
+
+        .left {
+            flex: 1;
+            max-width: 300px;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            margin: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .riddle {
+            margin-bottom: 20px;
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+
+        .right {
+            flex: 3;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+
+        input[type="text"] {
+            padding: 15px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 5px;
+            width: 80%;
+            max-width: 350px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        button {
+            background: #f7b731;
+            color: #fff;
+            border: none;
+            padding: 12px 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            margin-top: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        button:hover {
+            background: #d19b26;
+        }
+
+        .message {
+            margin-top: 20px;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .message.success {
+            color: #06e30d;
+        }
+
+        .message.error {
+            color: #fe1201;
+        }
+
+        .qr-code {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .qr-code img {
+            width: 200px;
+            height: 200px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Left Side: Riddles -->
+        <div class="left">
+            <div class="riddle">1. I have keys but no locks. I can be pressed but not held. What am I?</div>
+            <div class="riddle">2. I’m both a device and an animal. What am I?</div>
+            <div class="riddle">3. I’m a box, but I’m not for storing things. I help you watch videos. What am I?</div>
+            <div class="riddle">4. I’m a picture you can’t take with a camera. What am I?</div>
+            <div class="riddle">5. I can crash but I don’t make a sound. What am I?</div>
+            <div class="riddle">6. I can remember everything but forget when there’s no power. What am I?</div>
+        </div>
+
+        <!-- Right Side: Key Input and Message -->
+        <div class="right">
+            <h1>MIND MELD</h1>
+            <p>Solve the riddle from the given questions</p>
+            <input id="keyInput" type="text" placeholder="Enter the key here..." />
+            <button onclick="checkKey()">Submit</button>
+            <div class="message" id="message"></div>
+            <div class="qr-code" id="qrCode">
+                <img src="./badminton court.png" alt="QR Code">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function checkKey() {
+            const correctKey = "4fdd07838b7738edeb8de7bbf976e303687ba51f6884c1a1ff9d484099abadc6"; 
+            const userKey = document.getElementById("keyInput").value.trim();
+
+            const encoder = new TextEncoder();
+            const dataBuffer = encoder.encode(userKey);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', dataBuffer); 
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            const hashHex = hashArray.map(byte => byte.toString(16).padStart(2, '0')).join('');
+            const messageElement = document.getElementById("message");
+            const qrCodeElement = document.getElementById("qrCode");
+
+            if (correctKey === hashHex) {
+                messageElement.textContent = "Congratulations! You found the correct key!";
+                messageElement.className = "message success";
+                qrCodeElement.style.display = "block";
+            } else {
+                messageElement.textContent = "Oops! Try again.";
+                messageElement.className = "message error";
+                qrCodeElement.style.display = "none";
+            }
+        }
+    </script>
+</body>
+</html>
