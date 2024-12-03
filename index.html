@@ -6,6 +6,11 @@
     <title>Find the Hidden Key</title>
     <link href="https://fonts.googleapis.com/css2?family=Bilma:wght@400;600&display=swap" rel="stylesheet">
     <style>
+        /* Universal Reset and Box-Sizing */
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
         body {
             font-family: 'Bilma', sans-serif;
             margin: 0;
@@ -16,6 +21,7 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
+            overflow: hidden;
         }
 
         .container {
@@ -138,6 +144,16 @@
             p {
                 font-size: 1rem;
             }
+
+            input[type="text"] {
+                font-size: 1.1rem;
+                padding: 12px;
+            }
+
+            button {
+                font-size: 1.1rem;
+                padding: 15px;
+            }
         }
     </style>
 </head>
@@ -161,7 +177,7 @@
             <button onclick="checkKey()">Submit</button>
             <div class="message" id="message"></div>
             <div class="qr-code" id="qrCode">
-                <img src="./badminton court.png" alt="QR Code">
+                <img src="https://via.placeholder.com/200" alt="QR Code"> <!-- Use a placeholder or a correct URL -->
             </div>
         </div>
     </div>
